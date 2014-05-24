@@ -4,7 +4,7 @@ The decision made in mid 2014 to remove native support for the ability to disabl
 This patch will revert issue [#187423002](https://codereview.chromium.org/187423002) and allow you to compile with the -Ddisable_sse2=1 switch again.
 
 ## Arch linux package
-[Here](https://aur.archlinux.org/packages/chromium-no-sse2) is an Arch PKGBUILD that mirrors that of the official [community]/chromium I maintain that has this patch enabled.
+[Here](https://aur.archlinux.org/packages/chromium-no-sse2) is an Arch PKGBUILD that mirrors that of the official [extra]/chromium I maintain that has this patch enabled.
 
 Thanks and enjoy.
 
