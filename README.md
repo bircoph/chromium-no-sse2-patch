@@ -1,5 +1,5 @@
 ## Run on old hardware!
-The decision made in mid 2014 to remove native support for the ability to disable runtime options that REQUIRE the SSE2 instruction set.  Users of older hardware, like AMD Athlon XPs for example, need this feature.
+The decision was made in mid 2014 to remove native support for the ability to disable runtime options that REQUIRE the SSE2 instruction set.  Users of older hardware, like AMD Athlon XPs for example, need this feature.
 
 This patch will revert issue [#187423002](https://codereview.chromium.org/187423002) and allow you to compile with the -Ddisable_sse2=1 switch again.
 
