@@ -248,17 +248,6 @@ unchanged:
  source_set("video_processing") {
    sources = [
 unchanged:
---- chromium-38.0.2125.66.orig/v8/src/ia32/assembler-ia32.cc	2014-09-18 06:54:42.000000000 +0400
-+++ chromium-38.0.2125.66/v8/src/ia32/assembler-ia32.cc	2014-09-28 02:08:57.175123752 +0400
-@@ -51,7 +51,6 @@
- 
- void CpuFeatures::ProbeImpl(bool cross_compile) {
-   base::CPU cpu;
--  CHECK(cpu.has_sse2());  // SSE2 support is mandatory.
-   CHECK(cpu.has_cmov());  // CMOV support is mandatory.
- 
-   // Only use statically determined features for cross compile (snapshot).
-unchanged:
 --- chromium-38.0.2125.66.orig/third_party/qcms/BUILD.gn	2014-09-18 06:33:48.000000000 +0400
 +++ chromium-38.0.2125.66/third_party/qcms/BUILD.gn	2014-09-28 02:59:13.984647815 +0400
 @@ -26,8 +26,10 @@
@@ -292,77 +281,6 @@ unchanged:
              'SSE2_ENABLE',
            ],
 unchanged:
---- chromium-38.0.2125.66.orig/v8/BUILD.gn	2014-09-18 06:54:42.000000000 +0400
-+++ chromium-38.0.2125.66/v8/BUILD.gn	2014-09-28 14:19:56.892099220 +0400
-@@ -856,37 +856,37 @@
- 
-   if (v8_target_arch == "x86") {
-     sources += [
--      "src/ia32/assembler-ia32-inl.h",
--      "src/ia32/assembler-ia32.cc",
--      "src/ia32/assembler-ia32.h",
--      "src/ia32/builtins-ia32.cc",
--      "src/ia32/code-stubs-ia32.cc",
--      "src/ia32/code-stubs-ia32.h",
--      "src/ia32/codegen-ia32.cc",
--      "src/ia32/codegen-ia32.h",
--      "src/ia32/cpu-ia32.cc",
--      "src/ia32/debug-ia32.cc",
--      "src/ia32/deoptimizer-ia32.cc",
--      "src/ia32/disasm-ia32.cc",
--      "src/ia32/frames-ia32.cc",
--      "src/ia32/frames-ia32.h",
--      "src/ia32/full-codegen-ia32.cc",
--      "src/ia32/ic-ia32.cc",
--      "src/ia32/lithium-codegen-ia32.cc",
--      "src/ia32/lithium-codegen-ia32.h",
--      "src/ia32/lithium-gap-resolver-ia32.cc",
--      "src/ia32/lithium-gap-resolver-ia32.h",
--      "src/ia32/lithium-ia32.cc",
--      "src/ia32/lithium-ia32.h",
--      "src/ia32/macro-assembler-ia32.cc",
--      "src/ia32/macro-assembler-ia32.h",
--      "src/ia32/regexp-macro-assembler-ia32.cc",
--      "src/ia32/regexp-macro-assembler-ia32.h",
--      "src/ia32/stub-cache-ia32.cc",
--      "src/compiler/ia32/code-generator-ia32.cc",
--      "src/compiler/ia32/instruction-codes-ia32.h",
--      "src/compiler/ia32/instruction-selector-ia32.cc",
--      "src/compiler/ia32/linkage-ia32.cc",
-+      "src/x87/assembler-x87-inl.h",
-+      "src/x87/assembler-x87.cc",
-+      "src/x87/assembler-x87.h",
-+      "src/x87/builtins-x87.cc",
-+      "src/x87/code-stubs-x87.cc",
-+      "src/x87/code-stubs-x87.h",
-+      "src/x87/codegen-x87.cc",
-+      "src/x87/codegen-x87.h",
-+      "src/x87/cpu-x87.cc",
-+      "src/x87/debug-x87.cc",
-+      "src/x87/deoptimizer-x87.cc",
-+      "src/x87/disasm-x87.cc",
-+      "src/x87/frames-x87.cc",
-+      "src/x87/frames-x87.h",
-+      "src/x87/full-codegen-x87.cc",
-+      "src/x87/ic-x87.cc",
-+      "src/x87/lithium-codegen-x87.cc",
-+      "src/x87/lithium-codegen-x87.h",
-+      "src/x87/lithium-gap-resolver-x87.cc",
-+      "src/x87/lithium-gap-resolver-x87.h",
-+      "src/x87/lithium-x87.cc",
-+      "src/x87/lithium-x87.h",
-+      "src/x87/macro-assembler-x87.cc",
-+      "src/x87/macro-assembler-x87.h",
-+      "src/x87/regexp-macro-assembler-x87.cc",
-+      "src/x87/regexp-macro-assembler-x87.h",
-+      "src/x87/stub-cache-x87.cc",
-+      "src/compiler/x87/code-generator-x87.cc",
-+      "src/compiler/x87/instruction-codes-x87.h",
-+      "src/compiler/x87/instruction-selector-x87.cc",
-+      "src/compiler/x87/linkage-x87.cc",
-     ]
-   } else if (v8_target_arch == "x64") {
-     sources += [
 diff -Naurd chromium-38.0.2125.66.orig/third_party/libvpx/source/config/linux/ia32/vpx_config.asm chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vpx_config.asm
 --- chromium-38.0.2125.66.orig/third_party/libvpx/source/config/linux/ia32/vpx_config.asm	2014-09-28 03:05:43.000000000 +0400
 +++ chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vpx_config.asm	2014-09-28 15:39:37.792836426 +0400
@@ -401,14 +319,33 @@ diff -Naurd chromium-38.0.2125.66.orig/third_party/libvpx/source/config/linux/ia
  #define HAVE_AVX2 0
  #define HAVE_ALTIVEC 0
  #define HAVE_VPX_PORTS 1
+diff -Naurd chromium-38.0.2125.66.orig/v8/build/standalone.gypi chromium-38.0.2125.66/v8/build/standalone.gypi
+--- chromium-38.0.2125.66.orig/v8/build/standalone.gypi	2014-09-18 06:54:42.000000000 +0400
++++ chromium-38.0.2125.66/v8/build/standalone.gypi	2014-10-02 03:07:01.107113986 +0400
+@@ -95,6 +95,11 @@
+     'icu_gyp_path': '../third_party/icu/icu.gyp',
+ 
+     'conditions': [
++      ['host_arch=="ia32"', {
++        'variables': {
++          'v8_target_arch%': 'x87',
++         },
++      }],
+       ['(v8_target_arch=="arm" and host_arch!="arm") or \
+         (v8_target_arch=="arm64" and host_arch!="arm64") or \
+         (v8_target_arch=="mipsel" and host_arch!="mipsel") or \
+diff -Naurd chromium-38.0.2125.66.orig/v8/build/toolchain.gypi chromium-38.0.2125.66/v8/build/toolchain.gypi
 --- chromium-38.0.2125.66.orig/v8/build/toolchain.gypi	2014-09-18 06:54:42.000000000 +0400
-+++ chromium-38.0.2125.66/v8/build/toolchain.gypi	2014-09-28 22:26:02.021554410 +0400
-@@ -244,7 +244,7 @@
-       }],
-       ['v8_target_arch=="ia32"', {
-         'defines': [
--          'V8_TARGET_ARCH_IA32',
-+          'V8_TARGET_ARCH_X87',
-         ],
-       }],  # v8_target_arch=="ia32"
-       ['v8_target_arch=="x87"', {
++++ chromium-38.0.2125.66/v8/build/toolchain.gypi	2014-10-02 03:04:11.954351938 +0400
+@@ -92,6 +92,11 @@
+     'android_webview_build%': '<(android_webview_build)',
+   },
+   'conditions': [
++    ['host_arch=="ia32"', {
++      'variables': {
++        'v8_target_arch%': 'x87',
++       },
++    }],
+     ['host_arch=="ia32" or host_arch=="x64" or clang==1', {
+       'variables': {
+         'host_cxx_is_biarch%': 1,
