@@ -221,3 +221,36 @@ diff -Naurd chromium-38.0.2125.66.orig/v8/src/ia32/assembler-ia32.cc chromium-38
    CHECK(cpu.has_cmov());  // CMOV support is mandatory.
  
    // Only use statically determined features for cross compile (snapshot).
+diff -Naurd chromium-38.0.2125.66.orig/third_party/qcms/BUILD.gn chromium-38.0.2125.66/third_party/qcms/BUILD.gn
+--- chromium-38.0.2125.66.orig/third_party/qcms/BUILD.gn	2014-09-18 06:33:48.000000000 +0400
++++ chromium-38.0.2125.66/third_party/qcms/BUILD.gn	2014-09-28 02:59:13.984647815 +0400
+@@ -26,8 +26,10 @@
+   direct_dependent_configs = [ ":qcms_config" ]
+ 
+   if (cpu_arch == "x86" || cpu_arch == "x64") {
+-    defines = [ "SSE2_ENABLE" ]
+-    sources += [ "src/transform-sse2.c" ]
++    if (cpu_arch == "x64") {
++      defines = [ "SSE2_ENABLE" ]
++      sources += [ "src/transform-sse2.c" ]
++    }
+     if (!(is_win && cpu_arch == "x64")) {
+       # QCMS assumes this target isn't compiled since MSVC x64 doesn't support
+       # the MMX intrinsics present in the SSE1 code.
+diff -Naurd chromium-38.0.2125.66.orig/third_party/qcms/qcms.gyp chromium-38.0.2125.66/third_party/qcms/qcms.gyp
+--- chromium-38.0.2125.66.orig/third_party/qcms/qcms.gyp	2014-09-18 06:33:48.000000000 +0400
++++ chromium-38.0.2125.66/third_party/qcms/qcms.gyp	2014-09-28 03:00:30.198377268 +0400
+@@ -31,7 +31,12 @@
+       'msvs_disabled_warnings': [ 4018 ],
+ 
+       'conditions': [
+-        ['target_arch=="ia32" or target_arch=="x64"', {
++        ['target_arch=="ia32"', {
++          'sources': [
++            'src/transform-sse1.c',
++          ],
++        }],
++        ['target_arch=="x64"', {
+           'defines': [
+             'SSE2_ENABLE',
+           ],
