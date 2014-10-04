@@ -161,7 +161,7 @@ diff -Naurd chromium-38.0.2125.66.orig/third_party/WebKit/Source/platform/audio/
  // except when building for the IOS emulator.
  #if defined(ARCH_CPU_X86_FAMILY) && !defined(OS_IOS)
 -#define SIMD_SSE2 1
-+#define SIMD_SSE2 0
++#undef SIMD_SSE2
  #define SIMD_PADDING 8  // 8 * int16
  #endif
  
