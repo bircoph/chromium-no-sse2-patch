@@ -1,0 +1,224 @@
+--- chromium-38.0.2125.66/third_party/libvpx/libvpx.gyp.orig	2014-09-18 06:53:54.000000000 +0400
++++ chromium-38.0.2125.66/third_party/libvpx/libvpx.gyp	2014-09-26 15:01:48.886530735 +0400
+@@ -141,7 +141,7 @@
+                 # Currently no sse3 intrinsic functions
+                 #'libvpx_intrinsics_sse3',
+                 'libvpx_intrinsics_ssse3',
+-                'libvpx_intrinsics_sse4_1',
++                #'libvpx_intrinsics_sse4_1',
+                 # Currently no avx intrinsic functions
+                 #'libvpx_intrinsics_avx',
+                 #'libvpx_intrinsics_avx2',
+diff -Naurd chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vp8_rtcd.h chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vp8_rtcd.h
+--- chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vp8_rtcd.h	2014-09-18 06:53:54.000000000 +0400
++++ chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vp8_rtcd.h	2014-09-27 09:14:39.243670574 +0400
+@@ -250,7 +250,6 @@
+ 
+ void vp8_regular_quantize_b_c(struct block *, struct blockd *);
+ void vp8_regular_quantize_b_sse2(struct block *, struct blockd *);
+-void vp8_regular_quantize_b_sse4_1(struct block *, struct blockd *);
+ RTCD_EXTERN void (*vp8_regular_quantize_b)(struct block *, struct blockd *);
+ 
+ void vp8_regular_quantize_b_pair_c(struct block *b1, struct block *b2, struct blockd *d1, struct blockd *d2);
+@@ -272,7 +271,6 @@
+ RTCD_EXTERN void (*vp8_sad16x16x4d)(const unsigned char *src_ptr, int src_stride, const unsigned char * const ref_ptr[], int  ref_stride, unsigned int *sad_array);
+ 
+ void vp8_sad16x16x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad16x16x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad16x16x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ unsigned int vp8_sad16x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int ref_stride, unsigned int max_sad);
+@@ -290,7 +288,6 @@
+ RTCD_EXTERN void (*vp8_sad16x8x4d)(const unsigned char *src_ptr, int src_stride, const unsigned char * const ref_ptr[], int  ref_stride, unsigned int *sad_array);
+ 
+ void vp8_sad16x8x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad16x8x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad16x8x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ unsigned int vp8_sad4x4_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int ref_stride, unsigned int max_sad);
+@@ -307,7 +304,6 @@
+ RTCD_EXTERN void (*vp8_sad4x4x4d)(const unsigned char *src_ptr, int src_stride, const unsigned char * const ref_ptr[], int  ref_stride, unsigned int *sad_array);
+ 
+ void vp8_sad4x4x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad4x4x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad4x4x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ unsigned int vp8_sad8x16_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int ref_stride, unsigned int max_sad);
+@@ -324,7 +320,6 @@
+ RTCD_EXTERN void (*vp8_sad8x16x4d)(const unsigned char *src_ptr, int src_stride, const unsigned char * const ref_ptr[], int  ref_stride, unsigned int *sad_array);
+ 
+ void vp8_sad8x16x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad8x16x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad8x16x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ unsigned int vp8_sad8x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int ref_stride, unsigned int max_sad);
+@@ -341,7 +336,6 @@
+ RTCD_EXTERN void (*vp8_sad8x8x4d)(const unsigned char *src_ptr, int src_stride, const unsigned char * const ref_ptr[], int  ref_stride, unsigned int *sad_array);
+ 
+ void vp8_sad8x8x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad8x8x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad8x8x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ void vp8_short_fdct4x4_c(short *input, short *output, int pitch);
+@@ -553,7 +547,6 @@
+     if (flags & HAS_SSE2) vp8_filter_by_weight8x8 = vp8_filter_by_weight8x8_sse2;
+     vp8_full_search_sad = vp8_full_search_sad_c;
+     if (flags & HAS_SSE3) vp8_full_search_sad = vp8_full_search_sadx3;
+-    if (flags & HAS_SSE4_1) vp8_full_search_sad = vp8_full_search_sadx8;
+     vp8_get4x4sse_cs = vp8_get4x4sse_cs_c;
+     if (flags & HAS_MMX) vp8_get4x4sse_cs = vp8_get4x4sse_cs_mmx;
+     vp8_get_mb_ss = vp8_get_mb_ss_c;
+@@ -606,7 +599,6 @@
+     if (flags & HAS_SSE3) vp8_refining_search_sad = vp8_refining_search_sadx4;
+     vp8_regular_quantize_b = vp8_regular_quantize_b_c;
+     if (flags & HAS_SSE2) vp8_regular_quantize_b = vp8_regular_quantize_b_sse2;
+-    if (flags & HAS_SSE4_1) vp8_regular_quantize_b = vp8_regular_quantize_b_sse4_1;
+     vp8_sad16x16 = vp8_sad16x16_c;
+     if (flags & HAS_MMX) vp8_sad16x16 = vp8_sad16x16_mmx;
+     if (flags & HAS_SSE2) vp8_sad16x16 = vp8_sad16x16_wmt;
+@@ -617,7 +609,6 @@
+     vp8_sad16x16x4d = vp8_sad16x16x4d_c;
+     if (flags & HAS_SSE3) vp8_sad16x16x4d = vp8_sad16x16x4d_sse3;
+     vp8_sad16x16x8 = vp8_sad16x16x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad16x16x8 = vp8_sad16x16x8_sse4;
+     vp8_sad16x8 = vp8_sad16x8_c;
+     if (flags & HAS_MMX) vp8_sad16x8 = vp8_sad16x8_mmx;
+     if (flags & HAS_SSE2) vp8_sad16x8 = vp8_sad16x8_wmt;
+@@ -627,7 +618,6 @@
+     vp8_sad16x8x4d = vp8_sad16x8x4d_c;
+     if (flags & HAS_SSE3) vp8_sad16x8x4d = vp8_sad16x8x4d_sse3;
+     vp8_sad16x8x8 = vp8_sad16x8x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad16x8x8 = vp8_sad16x8x8_sse4;
+     vp8_sad4x4 = vp8_sad4x4_c;
+     if (flags & HAS_MMX) vp8_sad4x4 = vp8_sad4x4_mmx;
+     if (flags & HAS_SSE2) vp8_sad4x4 = vp8_sad4x4_wmt;
+@@ -636,7 +626,6 @@
+     vp8_sad4x4x4d = vp8_sad4x4x4d_c;
+     if (flags & HAS_SSE3) vp8_sad4x4x4d = vp8_sad4x4x4d_sse3;
+     vp8_sad4x4x8 = vp8_sad4x4x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad4x4x8 = vp8_sad4x4x8_sse4;
+     vp8_sad8x16 = vp8_sad8x16_c;
+     if (flags & HAS_MMX) vp8_sad8x16 = vp8_sad8x16_mmx;
+     if (flags & HAS_SSE2) vp8_sad8x16 = vp8_sad8x16_wmt;
+@@ -645,7 +634,6 @@
+     vp8_sad8x16x4d = vp8_sad8x16x4d_c;
+     if (flags & HAS_SSE3) vp8_sad8x16x4d = vp8_sad8x16x4d_sse3;
+     vp8_sad8x16x8 = vp8_sad8x16x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad8x16x8 = vp8_sad8x16x8_sse4;
+     vp8_sad8x8 = vp8_sad8x8_c;
+     if (flags & HAS_MMX) vp8_sad8x8 = vp8_sad8x8_mmx;
+     if (flags & HAS_SSE2) vp8_sad8x8 = vp8_sad8x8_wmt;
+@@ -654,7 +642,6 @@
+     vp8_sad8x8x4d = vp8_sad8x8x4d_c;
+     if (flags & HAS_SSE3) vp8_sad8x8x4d = vp8_sad8x8x4d_sse3;
+     vp8_sad8x8x8 = vp8_sad8x8x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad8x8x8 = vp8_sad8x8x8_sse4;
+     vp8_short_fdct4x4 = vp8_short_fdct4x4_c;
+     if (flags & HAS_MMX) vp8_short_fdct4x4 = vp8_short_fdct4x4_mmx;
+     if (flags & HAS_SSE2) vp8_short_fdct4x4 = vp8_short_fdct4x4_sse2;
+diff -Naurd chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vp9_rtcd.h chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vp9_rtcd.h
+--- chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vp9_rtcd.h	2014-09-18 06:53:54.000000000 +0400
++++ chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vp9_rtcd.h	2014-09-27 09:13:07.243371993 +0400
+@@ -988,7 +988,6 @@
+     if (flags & HAS_SSE2) vp9_fht8x8 = vp9_fht8x8_sse2;
+     vp9_full_search_sad = vp9_full_search_sad_c;
+     if (flags & HAS_SSE3) vp9_full_search_sad = vp9_full_search_sadx3;
+-    if (flags & HAS_SSE4_1) vp9_full_search_sad = vp9_full_search_sadx8;
+     vp9_fwht4x4 = vp9_fwht4x4_c;
+     if (flags & HAS_MMX) vp9_fwht4x4 = vp9_fwht4x4_mmx;
+     vp9_get16x16var = vp9_get16x16var_c;
+diff -Naurd chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vpx_config.asm chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vpx_config.asm
+--- chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vpx_config.asm	2014-09-18 06:53:54.000000000 +0400
++++ chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vpx_config.asm	2014-09-27 09:13:16.251009670 +0400
+@@ -15,7 +15,7 @@
+ HAVE_SSE2 equ 1
+ HAVE_SSE3 equ 1
+ HAVE_SSSE3 equ 1
+-HAVE_SSE4_1 equ 1
++HAVE_SSE4_1 equ 0
+ HAVE_AVX equ 1
+ HAVE_AVX2 equ 0
+ HAVE_ALTIVEC equ 0
+diff -Naurd chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vpx_config.h chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vpx_config.h
+--- chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vpx_config.h	2014-09-18 06:53:54.000000000 +0400
++++ chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vpx_config.h	2014-09-27 09:13:25.226648619 +0400
+@@ -27,7 +27,7 @@
+ #define HAVE_SSE2 1
+ #define HAVE_SSE3 1
+ #define HAVE_SSSE3 1
+-#define HAVE_SSE4_1 1
++#define HAVE_SSE4_1 0
+ #define HAVE_AVX 1
+ #define HAVE_AVX2 0
+ #define HAVE_ALTIVEC 0
+diff -Naurd chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vpx_rtcd.h chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vpx_rtcd.h
+--- chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32.orig/vpx_rtcd.h	2014-09-18 06:53:54.000000000 +0400
++++ chromium-38.0.2125.66/third_party/libvpx/source/config/linux/ia32/vpx_rtcd.h	2014-09-27 09:14:54.259066298 +0400
+@@ -317,23 +317,18 @@
+ RTCD_EXTERN void (*vp8_sad16x16x3)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned int *sad_array);
+ 
+ void vp8_sad4x4x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad4x4x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad4x4x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ void vp8_sad8x8x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad8x8x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad8x8x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ void vp8_sad8x16x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad8x16x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad8x16x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ void vp8_sad16x8x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad16x8x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad16x8x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ void vp8_sad16x16x8_c(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+-void vp8_sad16x16x8_sse4(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ RTCD_EXTERN void (*vp8_sad16x16x8)(const unsigned char *src_ptr, int src_stride, const unsigned char *ref_ptr, int  ref_stride, unsigned short *sad_array);
+ 
+ void vp8_sad4x4x4d_c(const unsigned char *src_ptr, int src_stride, const unsigned char * const ref_ptr[], int  ref_stride, unsigned int *sad_array);
+@@ -396,7 +391,6 @@
+ 
+ void vp8_regular_quantize_b_c(struct block *, struct blockd *);
+ void vp8_regular_quantize_b_sse2(struct block *, struct blockd *);
+-void vp8_regular_quantize_b_sse4(struct block *, struct blockd *);
+ RTCD_EXTERN void (*vp8_regular_quantize_b)(struct block *, struct blockd *);
+ 
+ void vp8_fast_quantize_b_c(struct block *, struct blockd *);
+@@ -782,19 +776,14 @@
+     if (flags & HAS_SSSE3) vp8_sad16x16x3 = vp8_sad16x16x3_ssse3;
+ 
+     vp8_sad4x4x8 = vp8_sad4x4x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad4x4x8 = vp8_sad4x4x8_sse4;
+ 
+     vp8_sad8x8x8 = vp8_sad8x8x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad8x8x8 = vp8_sad8x8x8_sse4;
+ 
+     vp8_sad8x16x8 = vp8_sad8x16x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad8x16x8 = vp8_sad8x16x8_sse4;
+ 
+     vp8_sad16x8x8 = vp8_sad16x8x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad16x8x8 = vp8_sad16x8x8_sse4;
+ 
+     vp8_sad16x16x8 = vp8_sad16x16x8_c;
+-    if (flags & HAS_SSE4_1) vp8_sad16x16x8 = vp8_sad16x16x8_sse4;
+ 
+     vp8_sad4x4x4d = vp8_sad4x4x4d_c;
+     if (flags & HAS_SSE3) vp8_sad4x4x4d = vp8_sad4x4x4d_sse3;
+@@ -843,7 +832,6 @@
+ 
+     vp8_regular_quantize_b = vp8_regular_quantize_b_c;
+     if (flags & HAS_SSE2) vp8_regular_quantize_b = vp8_regular_quantize_b_sse2;
+-    if (flags & HAS_SSE4_1) vp8_regular_quantize_b = vp8_regular_quantize_b_sse4;
+ 
+     vp8_fast_quantize_b = vp8_fast_quantize_b_c;
+     if (flags & HAS_SSE2) vp8_fast_quantize_b = vp8_fast_quantize_b_sse2;
+@@ -880,7 +868,6 @@
+ 
+     vp8_full_search_sad = vp8_full_search_sad_c;
+     if (flags & HAS_SSE3) vp8_full_search_sad = vp8_full_search_sadx3;
+-    if (flags & HAS_SSE4_1) vp8_full_search_sad = vp8_full_search_sadx8;
+ 
+     vp8_refining_search_sad = vp8_refining_search_sad_c;
+     if (flags & HAS_SSE3) vp8_refining_search_sad = vp8_refining_search_sadx4;
