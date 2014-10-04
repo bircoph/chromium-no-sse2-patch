@@ -165,3 +165,15 @@ diff -Naurd chromium-38.0.2125.66.orig/third_party/WebKit/Source/platform/audio/
  #define SIMD_PADDING 8  // 8 * int16
  #endif
  
+--- chromium-38.0.2125.77/skia/ext/convolver.cc.orig	2014-10-02 20:33:30.744629476 +0400
++++ chromium-38.0.2125.77/skia/ext/convolver.cc	2014-10-02 20:33:45.407841041 +0400
+@@ -6,7 +6,9 @@
+ 
+ #include "base/logging.h"
+ #include "skia/ext/convolver.h"
++#ifdef SIMD_SSE2
+ #include "skia/ext/convolver_SSE2.h"
++#endif
+ #include "skia/ext/convolver_mips_dspr2.h"
+ #include "third_party/skia/include/core/SkSize.h"
+ #include "third_party/skia/include/core/SkTypes.h"
