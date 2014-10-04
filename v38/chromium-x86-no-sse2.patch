@@ -401,3 +401,14 @@ diff -Naurd chromium-38.0.2125.66.orig/third_party/libvpx/source/config/linux/ia
  #define HAVE_AVX2 0
  #define HAVE_ALTIVEC 0
  #define HAVE_VPX_PORTS 1
+--- chromium-38.0.2125.66.orig/v8/build/toolchain.gypi	2014-09-18 06:54:42.000000000 +0400
++++ chromium-38.0.2125.66/v8/build/toolchain.gypi	2014-09-28 22:26:02.021554410 +0400
+@@ -244,7 +244,7 @@
+       }],
+       ['v8_target_arch=="ia32"', {
+         'defines': [
+-          'V8_TARGET_ARCH_IA32',
++          'V8_TARGET_ARCH_X87',
+         ],
+       }],  # v8_target_arch=="ia32"
+       ['v8_target_arch=="x87"', {
