@@ -1,0 +1,214 @@
+diff -Naurd chromium-38.0.2125.66.orig/breakpad/src/build/common.gypi chromium-38.0.2125.66/breakpad/src/build/common.gypi
+--- chromium-38.0.2125.66.orig/breakpad/src/build/common.gypi	2014-09-18 06:53:39.000000000 +0400
++++ chromium-38.0.2125.66/breakpad/src/build/common.gypi	2014-09-28 01:52:59.870268298 +0400
+@@ -725,8 +725,6 @@
+             'conditions': [
+               ['disable_sse2==0', {
+                 'cflags': [
+-                  '-march=pentium4',
+-                  '-msse2',
+                   '-mfpmath=sse',
+                 ],
+               }],
+diff -Naurd chromium-38.0.2125.66.orig/build/common.gypi chromium-38.0.2125.66/build/common.gypi
+--- chromium-38.0.2125.66.orig/build/common.gypi	2014-09-18 06:53:33.000000000 +0400
++++ chromium-38.0.2125.66/build/common.gypi	2014-09-28 01:36:31.332624519 +0400
+@@ -3653,7 +3653,6 @@
+                 # http://crbug.com/313032 for an example where this has "bit"
+                 # us in the past.
+                 'cflags': [
+-                  '-msse2',
+                   '-mfpmath=sse',
+                   '-mmmx',  # Allows mmintrin.h for MMX intrinsics.
+                   '-m32',
+diff -Naurd chromium-38.0.2125.66.orig/media/base/BUILD.gn chromium-38.0.2125.66/media/base/BUILD.gn
+--- chromium-38.0.2125.66.orig/media/base/BUILD.gn	2014-09-18 06:53:34.000000000 +0400
++++ chromium-38.0.2125.66/media/base/BUILD.gn	2014-09-28 02:02:04.879825799 +0400
+@@ -203,7 +203,7 @@
+     defines += [ "DISABLE_USER_INPUT_MONITOR" ]
+   }
+ 
+-  if (cpu_arch == "x86" || cpu_arch == "x64") {
++  if (cpu_arch == "x64") {
+     sources += [ "simd/convert_yuv_to_rgb_x86.cc" ]
+     deps += [
+       ":media_yasm",
+@@ -211,6 +211,13 @@
+       ":media_sse2",
+     ]
+   }
++  if (cpu_arch == "x86") {
++    sources += [ "simd/convert_yuv_to_rgb_x86.cc" ]
++    deps += [
++      ":media_yasm",
++      ":media_mmx",
++    ]
++  }
+ 
+   if (is_linux || is_win) {
+     sources += [
+diff -Naurd chromium-38.0.2125.66.orig/media/media.gyp chromium-38.0.2125.66/media/media.gyp
+--- chromium-38.0.2125.66.orig/media/media.gyp	2014-09-18 06:53:34.000000000 +0400
++++ chromium-38.0.2125.66/media/media.gyp	2014-09-28 02:04:01.020958960 +0400
+@@ -976,7 +976,7 @@
+             }],
+           ],
+         }],
+-        ['target_arch=="ia32" or target_arch=="x64"', {
++        ['target_arch=="x64"', {
+           'dependencies': [
+             'media_asm',
+             'media_mmx',
+@@ -984,6 +984,15 @@
+           ],
+           'sources': [
+             'base/simd/convert_yuv_to_rgb_x86.cc',
++          ],
++        }],
++        ['target_arch=="ia32"', {
++          'dependencies': [
++            'media_asm',
++            'media_mmx',
++          ],
++          'sources': [
++            'base/simd/convert_yuv_to_rgb_x86.cc',
+           ],
+         }],
+         ['OS!="linux" and OS!="win"', {
+diff -Naurd chromium-38.0.2125.66.orig/skia/skia.gyp chromium-38.0.2125.66/skia/skia.gyp
+--- chromium-38.0.2125.66.orig/skia/skia.gyp	2014-09-18 06:53:34.000000000 +0400
++++ chromium-38.0.2125.66/skia/skia.gyp	2014-09-28 02:04:58.931501411 +0400
+@@ -100,7 +100,8 @@
+       'conditions': [
+         [ 'os_posix == 1 and OS != "mac" and OS != "android" and \
+             target_arch != "arm" and target_arch != "mipsel" and \
+-            target_arch != "arm64" and target_arch != "mips64el"', {
++            target_arch != "arm64" and target_arch != "mips64el" and \
++            target_arch != "x86"', {
+           'cflags': [
+             '-msse2',
+           ],
+diff -Naurd chromium-38.0.2125.66.orig/skia/skia_library_opts.gyp chromium-38.0.2125.66/skia/skia_library_opts.gyp
+--- chromium-38.0.2125.66.orig/skia/skia_library_opts.gyp	2014-09-28 01:18:21.044584386 +0400
++++ chromium-38.0.2125.66/skia/skia_library_opts.gyp	2014-09-28 02:05:50.174200148 +0400
+@@ -40,7 +40,8 @@
+       'conditions': [
+         [ 'os_posix == 1 and OS != "mac" and OS != "android" and \
+            target_arch != "arm" and target_arch != "arm64" and \
+-           target_arch != "mipsel" and target_arch != "mips64el"', {
++           target_arch != "mipsel" and target_arch != "mips64el" and \
++           target_arch != "x86"', {
+           'cflags': [
+             '-msse2',
+           ],
+diff -Naurd chromium-38.0.2125.66.orig/third_party/skia/gyp/common_conditions.gypi chromium-38.0.2125.66/third_party/skia/gyp/common_conditions.gypi
+--- chromium-38.0.2125.66.orig/third_party/skia/gyp/common_conditions.gypi	2014-09-18 06:55:00.000000000 +0400
++++ chromium-38.0.2125.66/third_party/skia/gyp/common_conditions.gypi	2014-09-28 01:38:39.510704411 +0400
+@@ -35,7 +35,6 @@
+     # As of M35, Chrome requires SSE2 on x86 (and SSSE3 on Mac).
+     [ 'skia_arch_type == "x86"', {
+       'cflags': [
+-        '-msse2',
+         '-mfpmath=sse',
+       ],
+     }],
+diff -Naurd chromium-38.0.2125.66.orig/third_party/skia/gyp/opts.gyp chromium-38.0.2125.66/third_party/skia/gyp/opts.gyp
+--- chromium-38.0.2125.66.orig/third_party/skia/gyp/opts.gyp	2014-09-18 06:55:00.000000000 +0400
++++ chromium-38.0.2125.66/third_party/skia/gyp/opts.gyp	2014-09-28 01:38:24.918983219 +0400
+@@ -35,13 +35,6 @@
+       ],
+       'conditions': [
+         [ 'skia_arch_type == "x86" and skia_os != "ios"', {
+-          'conditions': [
+-            [ 'skia_os in ["linux", "freebsd", "openbsd", "solaris", "nacl", "chromeos", "android"]', {
+-              'cflags': [
+-                '-msse2',
+-              ],
+-            }],
+-          ],
+           'include_dirs': [
+             '../include/utils',
+           ],
+diff -Naurd chromium-38.0.2125.66.orig/third_party/webrtc/common_audio/BUILD.gn chromium-38.0.2125.66/third_party/webrtc/common_audio/BUILD.gn
+--- chromium-38.0.2125.66.orig/third_party/webrtc/common_audio/BUILD.gn	2014-09-18 06:54:11.000000000 +0400
++++ chromium-38.0.2125.66/third_party/webrtc/common_audio/BUILD.gn	2014-09-28 01:48:54.975441633 +0400
+@@ -13,7 +13,7 @@
+   # TODO(andrew): Implement.
+ }
+ 
+-if (cpu_arch == "x86" || cpu_arch == "x64") {
++if (cpu_arch == "x64") {
+   source_set("common_audio_sse2") {
+     # TODO(andrew): Implement.
+   }
+diff -Naurd chromium-38.0.2125.66.orig/third_party/webrtc/common_audio/common_audio.gyp chromium-38.0.2125.66/third_party/webrtc/common_audio/common_audio.gyp
+--- chromium-38.0.2125.66.orig/third_party/webrtc/common_audio/common_audio.gyp	2014-09-18 06:54:11.000000000 +0400
++++ chromium-38.0.2125.66/third_party/webrtc/common_audio/common_audio.gyp	2014-09-28 01:48:06.604301846 +0400
+@@ -150,7 +150,7 @@
+     },
+   ],  # targets
+   'conditions': [
+-    ['target_arch=="ia32" or target_arch=="x64"', {
++    ['target_arch=="x64"', {
+       'targets': [
+         {
+           'target_name': 'common_audio_sse2',
+diff -Naurd chromium-38.0.2125.66.orig/third_party/webrtc/modules/audio_processing/audio_processing.gypi chromium-38.0.2125.66/third_party/webrtc/modules/audio_processing/audio_processing.gypi
+--- chromium-38.0.2125.66.orig/third_party/webrtc/modules/audio_processing/audio_processing.gypi	2014-09-18 06:54:11.000000000 +0400
++++ chromium-38.0.2125.66/third_party/webrtc/modules/audio_processing/audio_processing.gypi	2014-09-28 01:50:40.798955067 +0400
+@@ -128,7 +128,7 @@
+             'ns/windows_private.h',
+           ],
+         }],
+-        ['target_arch=="ia32" or target_arch=="x64"', {
++        ['target_arch=="x64"', {
+           'dependencies': ['audio_processing_sse2',],
+         }],
+         ['(target_arch=="arm" and arm_version==7) or target_arch=="armv7"', {
+diff -Naurd chromium-38.0.2125.66.orig/third_party/webrtc/modules/desktop_capture/BUILD.gn chromium-38.0.2125.66/third_party/webrtc/modules/desktop_capture/BUILD.gn
+--- chromium-38.0.2125.66.orig/third_party/webrtc/modules/desktop_capture/BUILD.gn	2014-09-18 06:54:11.000000000 +0400
++++ chromium-38.0.2125.66/third_party/webrtc/modules/desktop_capture/BUILD.gn	2014-09-28 01:50:09.227022564 +0400
+@@ -10,7 +10,7 @@
+ import("../../build/webrtc.gni")
+ 
+ use_desktop_capture_differ_sse2 =
+-    (!is_ios && (cpu_arch == "x86" || cpu_arch == "x64"))
++    (!is_ios && (cpu_arch == "x64"))
+ 
+ source_set("desktop_capture") {
+   sources = [
+diff -Naurd chromium-38.0.2125.66.orig/third_party/webrtc/modules/desktop_capture/desktop_capture.gypi chromium-38.0.2125.66/third_party/webrtc/modules/desktop_capture/desktop_capture.gypi
+--- chromium-38.0.2125.66.orig/third_party/webrtc/modules/desktop_capture/desktop_capture.gypi	2014-09-18 06:54:11.000000000 +0400
++++ chromium-38.0.2125.66/third_party/webrtc/modules/desktop_capture/desktop_capture.gypi	2014-09-28 01:49:41.067108879 +0400
+@@ -92,7 +92,7 @@
+         "x11/x_server_pixel_buffer.h",
+       ],
+       'conditions': [
+-        ['OS!="ios" and (target_arch=="ia32" or target_arch=="x64")', {
++        ['OS!="ios" and (target_arch=="x64")', {
+           'dependencies': [
+             'desktop_capture_differ_sse2',
+           ],
+diff -Naurd chromium-38.0.2125.66.orig/third_party/webrtc/modules/video_processing/BUILD.gn chromium-38.0.2125.66/third_party/webrtc/modules/video_processing/BUILD.gn
+--- chromium-38.0.2125.66.orig/third_party/webrtc/modules/video_processing/BUILD.gn	2014-09-18 06:54:11.000000000 +0400
++++ chromium-38.0.2125.66/third_party/webrtc/modules/video_processing/BUILD.gn	2014-09-28 01:51:09.050854254 +0400
+@@ -8,7 +8,7 @@
+ 
+ import("../../build/webrtc.gni")
+ 
+-build_video_processing_sse2 = cpu_arch == "x86" || cpu_arch == "x64"
++build_video_processing_sse2 = cpu_arch == "x64"
+ 
+ source_set("video_processing") {
+   sources = [
+diff -Naurd chromium-38.0.2125.66.orig/v8/src/ia32/assembler-ia32.cc chromium-38.0.2125.66/v8/src/ia32/assembler-ia32.cc
+--- chromium-38.0.2125.66.orig/v8/src/ia32/assembler-ia32.cc	2014-09-18 06:54:42.000000000 +0400
++++ chromium-38.0.2125.66/v8/src/ia32/assembler-ia32.cc	2014-09-28 02:08:57.175123752 +0400
+@@ -51,7 +51,6 @@
+ 
+ void CpuFeatures::ProbeImpl(bool cross_compile) {
+   base::CPU cpu;
+-  CHECK(cpu.has_sse2());  // SSE2 support is mandatory.
+   CHECK(cpu.has_cmov());  // CMOV support is mandatory.
+ 
+   // Only use statically determined features for cross compile (snapshot).
